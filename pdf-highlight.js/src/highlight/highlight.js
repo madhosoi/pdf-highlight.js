@@ -145,7 +145,7 @@ var HighlightManager = {
 	highlightNode : function highlightNode(nodeId, data){
 
 		var key = nodeId.split(":")[0];
-		var nodeIdd = nodeId.split(":")[0].split("-")[0];
+		var nodeIdd = key.split("-")[0];
 		var node = document.getElementById(nodeIdd);
 		var elementOffset = nodeId.split(':')[1];
 		var startOffset = elementOffset.split("-")[0];
