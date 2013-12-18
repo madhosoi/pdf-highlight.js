@@ -36,6 +36,11 @@ var HighlightManager = {
 		this.container.addEventListener('keydown', this.keydown, false);
 		this.container.addEventListener('mousedown', this.mouseDown, false);
 		this.container.addEventListener('mouseup', this.mouseUp, false);
+		/*
+		 * Para dispositivos tactiles, pero hay que hacer pruebas
+		this.container.addEventListener('touchstart', this.mouseDown, false);
+		this.container.addEventListener('touchend', this.mouseUp, false);
+		*/
 
 	},
 
