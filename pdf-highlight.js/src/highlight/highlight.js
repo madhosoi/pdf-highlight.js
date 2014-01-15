@@ -130,10 +130,10 @@ var HighlightManager = {
 
 			newNode.id = node.id.replace(DIVNODE_PREFIX,
 					HIGHLIGHTDIVNODE_PREFIX);
-			newNode.innerHTML = node.innerHTML.substring(0, startOffset)
+			newNode.innerHTML = node.innerText.substring(0, startOffset)
 					+ "<span id='" + key + "' class='" + HIGHLIGHT_CSSCLASSNAME
-					+ "'>" + node.innerHTML.substring(startOffset, endOffset)
-					+ "</span>" + node.innerHTML.substring(endOffset);
+					+ "'>" + node.innerText.substring(startOffset, endOffset)
+					+ "</span>" + node.innerText.substring(endOffset);
 		}
 	},
 		
