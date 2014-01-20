@@ -102,6 +102,13 @@ var HighlightManager = {
 		this.active = !this.active;
 
 		if (this.active) {
+			
+//			var ss = document.styleSheets[0];
+//
+//			if ("addRule" in ss) {			
+//			    ss.addRule('::-moz-selection','background:rgba(255, 190, 9, 0.4);');
+//			    ss.addRule('::selection','background:rgba(255, 190, 9, 0.4);');
+//			}
 			this.highlightSelection();
 		}
 
@@ -117,7 +124,7 @@ var HighlightManager = {
 					this.active ? HIGHLIGHTENABLED_CLASSNAME
 							: HIGHLIGHTDISABLED_CLASSNAME);
 		}
-
+		
 	},
 
 	highlight : function highlightText(node, key, startOffset, endOffset) {
