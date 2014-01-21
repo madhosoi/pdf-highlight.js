@@ -143,7 +143,8 @@ var PDFView = {
     // Highlight management initialize
     HighlightManager.initialize({
     	active: false,
-    	container: container
+    	container: container,
+    	view: this
     });
     
     SecondaryToolbar.initialize({
@@ -155,6 +156,7 @@ var PDFView = {
       openFile: document.getElementById('secondaryOpenFile'),
       highlight: document.getElementById('secondaryHighlight'),
       highlightUndo: document.getElementById('secondaryHighlightUndo'),
+      extractScheme: document.getElementById('secondaryExportScheme'),
       print: document.getElementById('secondaryPrint'),
       download: document.getElementById('secondaryDownload'),
       firstPage: document.getElementById('firstPage'),
@@ -601,6 +603,11 @@ var PDFView = {
     ).then(null, noData);
   },
 
+  getFilename: function getFileName(){
+	  var url = this.url.split('#')[0];
+	  return  getPDFFileNameFromURL(url);
+  },
+  
   fallback: function pdfViewFallback() {
 //#if !(FIREFOX || MOZCENTRAL)
 //  return;
@@ -1735,6 +1742,9 @@ document.addEventListener('DOMContentLoaded', function webViewerLoad(evt) {
 
   document.getElementById('highLightUndo').addEventListener('click',
           SecondaryToolbar.highlightUndoClick.bind(SecondaryToolbar));
+  
+  document.getElementById('exportScheme').addEventListener('click',
+          SecondaryToolbar.extractSchemeClick.bind(SecondaryToolbar));
   
   document.getElementById('print').addEventListener('click',
     SecondaryToolbar.printClick.bind(SecondaryToolbar));

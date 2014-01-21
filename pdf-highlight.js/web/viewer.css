@@ -1313,6 +1313,7 @@ canvas {
 /* TODO: file FF bug to support ::-moz-selection:window-inactive
    so we can override the opaque grey background when the window is inactive;
    see https://bugzilla.mozilla.org/show_bug.cgi?id=706209 */
+
 ::selection { background:rgba(0,0,255,0.3); }
 ::-moz-selection { background:rgba(0,0,255,0.3); }
 
@@ -1724,4 +1725,9 @@ canvas {
 .toolbarButton.highlightUndo::before,
 .secondaryToolbarButton.highlightUndo::before {
   content: url(images/highlight-undo.png);
+}
+
+.toolbarButton.highlightExportScheme::before,
+.secondaryToolbarButton.highlightExportScheme::before {
+  content: url(images/toolbarButton-scheme.png);
 }

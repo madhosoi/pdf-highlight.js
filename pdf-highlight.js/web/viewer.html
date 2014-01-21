@@ -69,6 +69,8 @@ limitations under the License.
     <script type="text/javascript" src="password_prompt.js"></script>
     <script type="text/javascript" src="presentation_mode.js"></script>
     <!--#endif-->
+    <script type="text/javascript" src="../external/jspdf/jspdf.js"></script>
+    <script type="text/javascript" src="../external/jspdf/FileSaver.js"></script>
     <script type="text/javascript" src="../external/rangy/rangy-core.js"></script>
     <script type="text/javascript" src="../src/highlight/highlight.js"></script>
 
@@ -122,6 +124,9 @@ limitations under the License.
                     </button>
                     <button id="secondaryHighlight" class="secondaryToolbarButton highlightDisabled visibleLargeView" title="Highlight" tabindex="19" data-l10n-id="highlight">
                         <span data-l10n-id="highlight_label">Highlight</span>
+                    </button>
+                    <button id="secondaryExportScheme" class="secondaryToolbarButton highlightExportScheme visibleLargeView" title="Export Scheme" tabindex="19" data-l10n-id="export_scheme">
+                        <span data-l10n-id="export_scheme_label">Export Scheme</span>
                     </button>
                     <div class="horizontalToolbarSeparator visibleLargeView"></div>
                     <button id="secondaryPresentationMode" class="secondaryToolbarButton presentationMode visibleLargeView" title="Switch to Presentation Mode" tabindex="18" data-l10n-id="presentation_mode">
@@ -187,6 +192,10 @@ limitations under the License.
                                 
                                 <button id="highLight" class="toolbarButton highlightDisabled hiddenLargeView" title="Highlight" tabindex="13" data-l10n-id="highlight">
                                     <span data-l10n-id="highlight_label">Highlight</span>
+                                </button>
+                                
+                                <button id="exportScheme" class="toolbarButton highlightExportScheme hiddenLargeView" title="Export Scheme" tabindex="13" data-l10n-id="export_scheme">
+                                    <span data-l10n-id="export_scheme_label">Export Scheme</span>
                                 </button>
                             
                             <div class="verticalToolbarSeparator hiddenSmallView"></div>

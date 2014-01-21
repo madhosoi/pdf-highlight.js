@@ -39,6 +39,7 @@ var SecondaryToolbar = {
     this.pageRotateCw = options.pageRotateCw;
     this.pageRotateCcw = options.pageRotateCcw;
     this.highlightUndo = options.highlightUndo;
+    this.extractScheme = options.extractScheme;
     this.highlight = options.highlight;
 
     // Attach the event listeners.
@@ -49,6 +50,7 @@ var SecondaryToolbar = {
       { element: this.openFile, handler: this.openFileClick },
       { element: this.highlight, handler: this.highlightClick },
       { element: this.highlightUndo, handler: this.highlightUndoClick },
+      { element: this.extractScheme, handler: this.extractSchemeClick },
       { element: this.print, handler: this.printClick },
       { element: this.download, handler: this.downloadClick },
       { element: this.firstPage, handler: this.firstPageClick },
@@ -82,6 +84,10 @@ var SecondaryToolbar = {
 
   highlightUndoClick: function secondaryToolbarHighlightUndoClick(evt) {
       HighlightManager.undo();
+  },
+  
+  extractSchemeClick: function secondaryToolbarExtractSchemeClick(evt) {
+      HighlightManager.extractScheme();
   },
 
   printClick: function secondaryToolbarPrintClick(evt) {
