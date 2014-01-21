@@ -1726,3 +1726,8 @@ canvas {
 .secondaryToolbarButton.highlightUndo::before {
   content: url(images/highlight-undo.png);
 }
+
+.toolbarButton.highlightExportScheme::before,
+.secondaryToolbarButton.highlightExportScheme::before {
+  content: url(images/toolbarButton-scheme.png);
+}

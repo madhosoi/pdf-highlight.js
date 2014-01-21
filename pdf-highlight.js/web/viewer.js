@@ -155,6 +155,7 @@ var PDFView = {
       openFile: document.getElementById('secondaryOpenFile'),
       highlight: document.getElementById('secondaryHighlight'),
       highlightUndo: document.getElementById('secondaryHighlightUndo'),
+      extractScheme: document.getElementById('secondaryExportScheme'),
       print: document.getElementById('secondaryPrint'),
       download: document.getElementById('secondaryDownload'),
       firstPage: document.getElementById('firstPage'),
@@ -1735,6 +1736,9 @@ document.addEventListener('DOMContentLoaded', function webViewerLoad(evt) {
 
   document.getElementById('highLightUndo').addEventListener('click',
           SecondaryToolbar.highlightUndoClick.bind(SecondaryToolbar));
+  
+  document.getElementById('exportScheme').addEventListener('click',
+          SecondaryToolbar.extractSchemeClick.bind(SecondaryToolbar));
   
   document.getElementById('print').addEventListener('click',
     SecondaryToolbar.printClick.bind(SecondaryToolbar));

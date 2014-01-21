@@ -470,5 +470,11 @@ var HighlightManager = {
 				i++;
 			}
 		}
+	},
+	
+	extractScheme : function extractSchemeCommand(){
+		var doc = new jsPDF();
+		doc.save('Scheme.pdf');
+		doc = null;
 	}
 };
