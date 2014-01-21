@@ -1,17 +1,17 @@
 /**
  * Highlight manager library
  * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  * 
  * 
  */
@@ -52,9 +52,9 @@ var HighlightManager = {
 		this.container.addEventListener('mouseup', this.mouseUp, false);
 		/*
 		 * Para dispositivos tactiles, pero hay que hacer pruebas
-		this.container.addEventListener('touchstart', this.mouseDown, false);
-		this.container.addEventListener('touchend', this.mouseUp, false);
-		*/
+		 * this.container.addEventListener('touchstart', this.mouseDown, false);
+		 * this.container.addEventListener('touchend', this.mouseUp, false);
+		 */
 
 	},
 
@@ -99,17 +99,35 @@ var HighlightManager = {
 
 	toogleHighlight : function toogleHighlight(evt) {
 
+		function addRule(s, l, c) {
+			if (!s)
+				return false;
+			if (s.insertRule) {
+				s.insertRule(l + "{" + c + "}", s.cssRules.length);
+				return true;
+			} else if (s.addRule) {
+				return s.addRule(l, c) ? true : false;
+			}
+			return false;
+		}
 		this.active = !this.active;
 
+		var ss=false;
+		if(document.styleSheets)ss=document.styleSheets[0];
+		if(ss.sheet)ss=ss.sheet;
+		if(ss.styleSheet)ss=ss.styleSheet;
+		
 		if (this.active) {
+			if(ss){
+				addRule(ss,'::selection','background:rgba(255, 190, 9, 0.4);');
+			}
 			
-//			var ss = document.styleSheets[0];
-//
-//			if ("addRule" in ss) {			
-//			    ss.addRule('::-moz-selection','background:rgba(255, 190, 9, 0.4);');
-//			    ss.addRule('::selection','background:rgba(255, 190, 9, 0.4);');
-//			}
 			this.highlightSelection();
+		}
+		else{
+			if (ss.removeRule){
+				ss.removeRule(ss.cssRules.length-1);
+			}
 		}
 
 		var buttons = document
@@ -124,7 +142,7 @@ var HighlightManager = {
 					this.active ? HIGHLIGHTENABLED_CLASSNAME
 							: HIGHLIGHTDISABLED_CLASSNAME);
 		}
-		
+
 	},
 
 	highlight : function highlightText(node, key, startOffset, endOffset) {
@@ -143,7 +161,7 @@ var HighlightManager = {
 					+ "</span>" + node.innerText.substring(endOffset);
 		}
 	},
-		
+
 	// EXAMPLE : node6.175-5:12-20
 	dehighlight : function dehighlightText(nodeId) {
 
@@ -162,8 +180,8 @@ var HighlightManager = {
 			console.log(nodeIdd + " no encontrado.");
 		}
 	},
-	
-	highlightNode : function highlightNode(nodeId, data){
+
+	highlightNode : function highlightNode(nodeId, data) {
 
 		var key = nodeId.split(":")[0];
 		var nodeIdd = key.split("-")[0];
@@ -225,7 +243,8 @@ var HighlightManager = {
 			return newArray;
 		}
 
-		function highlightOneLine(node, startOffset, endOffset, data, historyCommand) {
+		function highlightOneLine(node, startOffset, endOffset, data,
+				historyCommand) {
 
 			var dataAffected = findNodesInArray(data, node.id);
 			var i;
@@ -270,21 +289,23 @@ var HighlightManager = {
 				i = 0;
 				while (i < selectionsToRemove.length) {
 
-					HighlightManager.dehighlightNode(selectionsToRemove[i], data);
+					HighlightManager.dehighlightNode(selectionsToRemove[i],
+							data);
 					i++;
 				}
 
-				var spanId = node.getElementsByClassName(HIGHLIGHT_CSSCLASSNAME).length;
+				var spanId = node
+						.getElementsByClassName(HIGHLIGHT_CSSCLASSNAME).length;
 				var key = node.id + "-" + spanId;
 				var nodeId = key + ":" + startOffset + "-" + endOffset;
-				
+
 				HighlightManager.highlightNode(nodeId, data);
-				
+
 				var historyItem = {
 					highlightItem : nodeId,
 					dehighlightItems : selectionsToRemove
 				};
-				
+
 				historyCommand.push(historyItem);
 			}
 		}
@@ -298,20 +319,20 @@ var HighlightManager = {
 			var range = selection.getRangeAt(0);
 
 			var nodes = range.getNodes();
-			
+
 			var historyItem = new Array();
-			
+
 			var affectedNodes = new Array();
 			var i;
 			i = 0;
 			while (i < nodes.length) {
-			    var affectedNode = HighlightManager.findNode(nodes[i]);
-			    if (HighlightManager.isLineNode(affectedNode)) {
-			        if (!arrayContains(affectedNodes, affectedNode)) {
-			            affectedNodes.push(affectedNode);
-			        }
-			    }
-			    i++;
+				var affectedNode = HighlightManager.findNode(nodes[i]);
+				if (HighlightManager.isLineNode(affectedNode)) {
+					if (!arrayContains(affectedNodes, affectedNode)) {
+						affectedNodes.push(affectedNode);
+					}
+				}
+				i++;
 			}
 
 			if (affectedNodes.length == 1) {
@@ -338,7 +359,8 @@ var HighlightManager = {
 							endOffset = node.textContent.length;
 						}
 
-						highlightOneLine(node, startOffset, endOffset, data, historyItem);
+						highlightOneLine(node, startOffset, endOffset, data,
+								historyItem);
 
 						range.refresh();
 					}
@@ -350,7 +372,7 @@ var HighlightManager = {
 
 			// Store history
 			HighlightManager.history.push(historyItem);
-			
+
 			// Clear UI selection
 			HighlightManager.clearSelection(selection);
 		}
@@ -387,15 +409,14 @@ var HighlightManager = {
 				HighlightManager.keyHandled = false;
 				break;
 			}
-		}
-		else if (evt.ctrlKey){
-		    switch (evt.keyCode) {
-		        case 90: // 'z'
-		            if (HighlightManager.active) {
-		                HighlightManager.undo();
-		            }
-		            break;
-		    }
+		} else if (evt.ctrlKey) {
+			switch (evt.keyCode) {
+			case 90: // 'z'
+				if (HighlightManager.active) {
+					HighlightManager.undo();
+				}
+				break;
+			}
 		}
 	},
 
@@ -433,16 +454,17 @@ var HighlightManager = {
 
 	undo : function undoCommand() {
 		var itemCommand = HighlightManager.history.pop();
-		if (itemCommand){
+		if (itemCommand) {
 			var data = null;
 			data = HighlightManager.get();
 			var i = 0;
-			while (i < itemCommand.length){
+			while (i < itemCommand.length) {
 				var item = itemCommand[i];
 				HighlightManager.dehighlightNode(item.highlightItem, data);
 				var j = 0;
-				while(j < item.dehighlightItems.length){
-					HighlightManager.highlightNode(item.dehighlightItems[j], data);
+				while (j < item.dehighlightItems.length) {
+					HighlightManager.highlightNode(item.dehighlightItems[j],
+							data);
 					j++;
 				}
 				i++;
