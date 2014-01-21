@@ -143,7 +143,8 @@ var PDFView = {
     // Highlight management initialize
     HighlightManager.initialize({
     	active: false,
-    	container: container
+    	container: container,
+    	view: this
     });
     
     SecondaryToolbar.initialize({
@@ -602,6 +603,11 @@ var PDFView = {
     ).then(null, noData);
   },
 
+  getFilename: function getFileName(){
+	  var url = this.url.split('#')[0];
+	  return  getPDFFileNameFromURL(url);
+  },
+  
   fallback: function pdfViewFallback() {
 //#if !(FIREFOX || MOZCENTRAL)
 //  return;

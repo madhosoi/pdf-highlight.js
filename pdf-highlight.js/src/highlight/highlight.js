@@ -39,13 +39,14 @@ var HighlightManager = {
 	mouseHandled : false,
 	container : null,
 	store : null,
+	view : null,
 	history : new Array(),
 
 	initialize : function highlightManagerInitialize(options) {
 
 		this.active = options.active;
 		this.container = options.container;
-
+		this.view = options.view;
 		this.container.addEventListener('keyup', this.keyup, false);
 		this.container.addEventListener('keydown', this.keydown, false);
 		this.container.addEventListener('mousedown', this.mouseDown, false);
@@ -112,21 +113,23 @@ var HighlightManager = {
 		}
 		this.active = !this.active;
 
-		var ss=false;
-		if(document.styleSheets)ss=document.styleSheets[0];
-		if(ss.sheet)ss=ss.sheet;
-		if(ss.styleSheet)ss=ss.styleSheet;
-		
+		var ss = false;
+		if (document.styleSheets)
+			ss = document.styleSheets[0];
+		if (ss.sheet)
+			ss = ss.sheet;
+		if (ss.styleSheet)
+			ss = ss.styleSheet;
+
 		if (this.active) {
-			if(ss){
-				addRule(ss,'::selection','background:rgba(255, 190, 9, 0.4);');
+			if (ss) {
+				addRule(ss, '::selection', 'background:rgba(255, 190, 9, 0.4);');
 			}
-			
+
 			this.highlightSelection();
-		}
-		else{
-			if (ss.removeRule){
-				ss.removeRule(ss.cssRules.length-1);
+		} else {
+			if (ss.removeRule) {
+				ss.removeRule(ss.cssRules.length - 1);
 			}
 		}
 
@@ -471,10 +474,52 @@ var HighlightManager = {
 			}
 		}
 	},
-	
-	extractScheme : function extractSchemeCommand(){
+
+	extractScheme : function extractSchemeCommand() {
 		var doc = new jsPDF();
-		doc.save('Scheme.pdf');
+		var writePosition = 20;
+		
+		doc.setFont("times");
+		
+		doc.setFontSize(20);
+		if (HighlightManager.view.documentInfo){
+			if (HighlightManager.view.documentInfo.Title){
+				doc.text(20, writePosition, HighlightManager.view.documentInfo.Title);
+			}
+			if (HighlightManager.view.documentInfo.Author){
+				doc.setFontSize(18);
+				writePosition = writePosition + 10;
+				doc.text(20, writePosition, HighlightManager.view.documentInfo.Author);
+			}
+		}
+		doc.setFontSize(16);
+		writePosition = writePosition + 10;
+		var data = HighlightManager.get();
+		
+		for ( var element in data.sort()) {
+
+			var elementId = data[element].split(':')[0];
+			var elementOffset = data[element].split(':')[1];
+
+			var elementPageId = PAGECONTAINER_PREFIX
+					+ (parseInt(elementId.split(".")[0].replace(DIVNODE_PREFIX,
+							"")) + 1);
+			var node = document.getElementById(elementId.split("-")[0]);		
+			if (node) {
+				writePosition = writePosition + 10;
+				var startOffset = elementOffset.split("-")[0];
+				var endOffset = elementOffset.split("-")[1];
+				var text = node.innerText.substring(startOffset, endOffset);
+				
+				// Quitar los caracteres unicode hasta que jsPDF lo soporte.
+				text = text.replace(/[^A-Za-z 0-9 \.,\?'""!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]`~]*/g, '');
+				console.log(text);
+				doc.text(20, writePosition, text);
+			}
+		}
+
+		doc.save('Scheme_' + HighlightManager.view.getFilename());
 		doc = null;
 	}
+	
 };
