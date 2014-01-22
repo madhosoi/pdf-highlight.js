@@ -69,8 +69,10 @@ var HighlightManager = {
 		var data = HighlightManager.get();
 		for ( var element in data) {
 
-			var elementId = data[element].split(':')[0];
-			var elementOffset = data[element].split(':')[1];
+			var nodeDef = data[element].split('~')[0];
+
+			var elementId = nodeDef.split(':')[0];
+			var elementOffset = nodeDef.split(':')[1];
 
 			var elementPageId = PAGECONTAINER_PREFIX
 					+ (parseInt(elementId.split(".")[0].replace(DIVNODE_PREFIX,
@@ -191,11 +193,16 @@ var HighlightManager = {
 		var key = nodeId.split(":")[0];
 		var nodeIdd = key.split("-")[0];
 		var node = document.getElementById(nodeIdd);
+
 		var elementOffset = nodeId.split(':')[1];
 		var startOffset = elementOffset.split("-")[0];
 		var endOffset = elementOffset.split("-")[1];
+
+		var text = node.innerText.substring(startOffset, endOffset);
+
 		HighlightManager.highlight(node, key, startOffset, endOffset);
-		data.push(nodeId);
+
+		data.push(nodeId + "~" + text);
 	},
 
 	dehighlightNode : function dehighlightNode(nodeId, data) {
@@ -480,48 +487,64 @@ var HighlightManager = {
 	extractScheme : function extractSchemeCommand() {
 		var doc = new jsPDF();
 		var writePosition = 20;
-		
+
 		doc.setFont("times");
-		
+
 		doc.setFontSize(20);
-		if (HighlightManager.view.documentInfo){
-			if (HighlightManager.view.documentInfo.Title){
-				doc.text(20, writePosition, HighlightManager.view.documentInfo.Title);
+		if (HighlightManager.view.documentInfo) {
+			if (HighlightManager.view.documentInfo.Title) {
+				doc.text(20, writePosition,
+						HighlightManager.view.documentInfo.Title);
 			}
-			if (HighlightManager.view.documentInfo.Author){
+			if (HighlightManager.view.documentInfo.Author) {
 				doc.setFontSize(18);
 				writePosition = writePosition + 10;
-				doc.text(20, writePosition, HighlightManager.view.documentInfo.Author);
+				doc.text(20, writePosition,
+						HighlightManager.view.documentInfo.Author);
 			}
 		}
 		doc.setFontSize(16);
 		writePosition = writePosition + 10;
 		var data = HighlightManager.get();
-		
+
+		var lineIndex = 0;
+		var lineText = "";
 		for ( var element in data.sort()) {
 
-			var elementId = data[element].split(':')[0];
-			var elementOffset = data[element].split(':')[1];
+			var nodeDef = data[element].split('~')[0];
 
-			var elementPageId = PAGECONTAINER_PREFIX
-					+ (parseInt(elementId.split(".")[0].replace(DIVNODE_PREFIX,
-							"")) + 1);
-			var node = document.getElementById(elementId.split("-")[0]);		
-			if (node) {
+			var elementId = nodeDef.split(':')[0];
+
+			var pageId = elementId.split(".")[0].replace(DIVNODE_PREFIX, "");
+			var nodeId = elementId.split("-")[0];
+			var lineId = nodeId.split(".")[1];
+			var text = data[element].split('~')[1];
+
+			// Quitar los caracteres unicode hasta que jsPDF lo soporte.
+			text = text
+					.replace(
+							/[^A-Za-z 0-9 \.,\?'""!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]`~]*/g,
+							'');
+
+			if (lineId != lineIndex) {
+				lineIndex = lineId;
 				writePosition = writePosition + 10;
-				var startOffset = elementOffset.split("-")[0];
-				var endOffset = elementOffset.split("-")[1];
-				var text = node.innerText.substring(startOffset, endOffset);
-				
-				// Quitar los caracteres unicode hasta que jsPDF lo soporte.
-				text = text.replace(/[^A-Za-z 0-9 \.,\?'""!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]`~]*/g, '');
-				console.log(text);
-				doc.text(20, writePosition, text);
+				doc.text(20, writePosition, lineText);
+				lineText = text;
+			} else {
+				lineText += text;
 			}
+
+			console.log(text);
+
+		}
+		if (lineText != "") {
+			writePosition = writePosition + 10;
+			doc.text(20, writePosition, lineText);
 		}
 
 		doc.save(SCHEMEFILENAME_PREFIX + HighlightManager.view.getFilename());
 		doc = null;
 	}
-	
+
 };

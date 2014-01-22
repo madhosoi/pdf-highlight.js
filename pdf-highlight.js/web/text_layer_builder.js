@@ -153,6 +153,9 @@ var TextLayerBuilder = function textLayerBuilder(options) {
     var textDivs = this.textDivs;
     var bidiTexts = this.textContent.bidiTexts;
 
+    var lineIndex = 0;
+    var topPosition = 0;
+    var wordIndex = 0;
     for (var i = 0; i < bidiTexts.length; i++) {
       var bidiText = bidiTexts[i];
       var textDiv = textDivs[i];
@@ -163,8 +166,17 @@ var TextLayerBuilder = function textLayerBuilder(options) {
 
       textDiv.textContent = bidiText.str;
       
+      if (textDiv.style.top != topPosition){
+    	  lineIndex++;
+    	  topPosition = textDiv.style.top;
+    	  wordIndex = 1;
+      }
+      else{
+    	  wordIndex++;
+      }
+      
       // Highlight requirement
-      textDiv.id = "node" + this.pageIdx + "." + i;
+      textDiv.id = "node" + this.pageIdx + "." + lineIndex + "." + wordIndex;
       
       
       // TODO refactor text layer to use text content position
