@@ -28,6 +28,8 @@ var HIGHLIGHTDIVNODE_PREFIX = "highlightNode";
 var DIVNODE_PREFIX = "node";
 var PAGECONTAINER_PREFIX = "pageContainer";
 
+var SCHEMEFILENAME_PREFIX = "Scheme_";
+
 var HighlightHistoryItem = {
 	highlightItem : null,
 	dehighlightItems : new Array()
@@ -518,7 +520,7 @@ var HighlightManager = {
 			}
 		}
 
-		doc.save('Scheme_' + HighlightManager.view.getFilename());
+		doc.save(SCHEMEFILENAME_PREFIX + HighlightManager.view.getFilename());
 		doc = null;
 	}
 	
