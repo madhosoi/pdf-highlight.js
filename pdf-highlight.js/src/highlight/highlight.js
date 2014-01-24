@@ -485,12 +485,15 @@ var HighlightManager = {
 	},
 
 	extractScheme : function extractSchemeCommand() {
+		
 		var doc = new jsPDF();
+		
+		var linesPerPage = 24;
 		var writePosition = 20;
 
 		doc.setFont("times");
-
 		doc.setFontSize(20);
+		
 		if (HighlightManager.view.documentInfo) {
 			if (HighlightManager.view.documentInfo.Title) {
 				doc.text(20, writePosition,
@@ -509,6 +512,7 @@ var HighlightManager = {
 
 		var lineIndex = 0;
 		var lineText = "";
+		var lineCount = 0;
 		for ( var element in data.sort()) {
 
 			var nodeDef = data[element].split('~')[0];
@@ -531,6 +535,12 @@ var HighlightManager = {
 				writePosition = writePosition + 10;
 				doc.text(20, writePosition, lineText);
 				lineText = text;
+				lineCount++;
+				if (lineCount == linesPerPage){
+					lineCount = 0;
+					doc.addPage();
+					writePosition = 20;
+				}
 			} else {
 				lineText += text;
 			}
