@@ -153,9 +153,18 @@ var TextLayerBuilder = function textLayerBuilder(options) {
     var textDivs = this.textDivs;
     var bidiTexts = this.textContent.bidiTexts;
 
+    // Highlight requirements
     var lineIndex = 0;
     var topPosition = 0;
     var wordIndex = 0;
+    function formatNumber(num, lenght){
+    	var zeros = "";
+    	for(var i = 0; i < lenght; i++){
+    		zeros += "0";
+    	}
+    	return (zeros + num).slice(-lenght);
+    }
+    
     for (var i = 0; i < bidiTexts.length; i++) {
       var bidiText = bidiTexts[i];
       var textDiv = textDivs[i];
@@ -174,9 +183,9 @@ var TextLayerBuilder = function textLayerBuilder(options) {
       else{
     	  wordIndex++;
       }
-      
-      // Highlight requirement
-      textDiv.id = "node" + this.pageIdx + "." + lineIndex + "." + wordIndex;
+
+      // Highlight requirements
+      textDiv.id = "node" + formatNumber(this.pageIdx,3) + "." + formatNumber(lineIndex,3) + "." + formatNumber(wordIndex,2);
       
       
       // TODO refactor text layer to use text content position

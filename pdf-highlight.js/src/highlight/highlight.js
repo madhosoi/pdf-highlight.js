@@ -155,7 +155,7 @@ var HighlightManager = {
 	highlight : function highlightText(node, key, startOffset, endOffset) {
 		if (HighlightManager.isLineNode(node)) {
 
-			var pageId = node.id.split(".")[0].replace(DIVNODE_PREFIX, "");
+			var pageId = parseInt(node.id.split(".")[0].replace(DIVNODE_PREFIX, ""));
 
 			var newNode = PDFView.pages[pageId].textLayer.highlightLayer
 					.appendChild(node.cloneNode());
@@ -172,8 +172,8 @@ var HighlightManager = {
 	// EXAMPLE : node6.175-5:12-20
 	dehighlight : function dehighlightText(nodeId) {
 
-		var pageId = nodeId.split(":")[0].split(".")[0].replace(DIVNODE_PREFIX,
-				"");
+		var pageId = parseInt(nodeId.split(":")[0].split(".")[0].replace(DIVNODE_PREFIX,
+				""));
 
 		var nodeIdd = nodeId.split(":")[0].split("-")[0].replace(
 				DIVNODE_PREFIX, HIGHLIGHTDIVNODE_PREFIX);
@@ -515,7 +515,7 @@ var HighlightManager = {
 
 			var elementId = nodeDef.split(':')[0];
 
-			var pageId = elementId.split(".")[0].replace(DIVNODE_PREFIX, "");
+			var pageId = parseInt(elementId.split(".")[0].replace(DIVNODE_PREFIX, ""));
 			var nodeId = elementId.split("-")[0];
 			var lineId = nodeId.split(".")[1];
 			var text = data[element].split('~')[1];
